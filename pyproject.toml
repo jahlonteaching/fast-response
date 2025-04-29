@@ -6,4 +6,5 @@ requires-python = ">=3.12"
 dependencies = [
     "dotenv>=0.9.9",
     "openai>=1.76.1",
+    "nicegui>=2.15.0",
 ]
