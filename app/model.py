@@ -14,11 +14,11 @@ class ProcesadorCorreo(IProcesadorCorreo):
     def __init__(self):
         self.smtp_server = os.getenv("SMTP_SERVER")
         self.smtp_port = int(os.getenv("SMTP_PORT"))
-        self.client = openai.Client(api_key=os.getenv("OPEN_API_KEY"))
+        self.client = openai.AsyncClient(api_key=os.getenv("OPEN_API_KEY"))
 
-    def generar_respuesta(self, contenido: str) -> str:
+    async def generar_respuesta(self, contenido: str) -> str:
         try:
-            response = self.client.chat.completions.create(
+            response = await self.client.chat.completions.create(
                 model="gpt-4",
                 messages=[
                     {"role": "developer", "content": "Eres un asistente que redacta respuestas profesionales a correos."},

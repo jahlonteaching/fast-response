@@ -1,15 +1,10 @@
+import asyncio
+
 from nicegui import ui
-from abc import ABC, abstractmethod
+from app.model import ProcesadorCorreo
 
-# Implementación de ejemplo
-class ProcesadorCorreoEjemplo:
-    def generar_respuesta(self, contenido: str) -> str:
-        return f"Gracias por tu mensaje. En breve te responderemos.\n\nContenido original:\n{contenido}"
 
-    def enviar_respuesta(self, asunto: str, contenido: str, destinatario: str):
-        print(f"Enviando correo a {destinatario} con asunto '{asunto}' y contenido:\n{contenido}")
-
-procesador = ProcesadorCorreoEjemplo()
+procesador = ProcesadorCorreo()
 
 # Interfaz gráfica
 ui.label('📨 Procesador de Correos').classes('text-3xl font-bold mb-6 text-center')
@@ -21,7 +16,10 @@ with ui.card().classes('w-full max-w-2xl mx-auto shadow-2xl p-6 bg-white rounded
     respuesta_output = ui.textarea(label='Respuesta generada').props('readonly').classes('w-full mb-4 h-40')
 
     def on_generar_click():
-        respuesta_output.value = procesador.generar_respuesta(contenido_input.value)
+        async def generar_respuesta_async():
+            respuesta_output.value = await procesador.generar_respuesta(contenido_input.value)
+
+        asyncio.create_task(generar_respuesta_async())
 
     ui.button('🧠 Generar respuesta', on_click=on_generar_click).classes('mb-6 bg-blue-600 text-white hover:bg-blue-700')
 
